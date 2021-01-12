@@ -1,0 +1,144 @@
+<div class="wrapper">
+    <app-sidebar style="background: white !important"></app-sidebar>
+
+    <main class="content">
+        <div class="container-fluid">
+
+            <div class="header">
+                <h1 class="header-title">
+                    Apartado de productos
+                </h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="['/productos']">Productos</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edicion de producto</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row">
+                <div *ngIf="error_message" class="col-12 col-lg-12">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <div class="alert-message">
+                            {{error_message}}
+                        </div>
+
+                        <button (click)="error_alert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                      </button>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12" *ngIf="success_message">
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <div class="alert-message">
+                            {{success_message}}
+                        </div>
+
+                        <button (click)="success_alert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">x</span>
+                    </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Registro</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Categoría</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="card">
+
+                                <div class="card-body">
+                                    <div class="row mt-4">
+                                        <div class="col-lg-8">
+                                            <form #productoForm="ngForm" (ngSubmit)="onSubmit(productoForm)">
+                                                <div class="row">
+                                                    <div class="col-lg-9 form-group">
+                                                        <label><b>Titulo del producto</b></label>
+                                                        <input required type="text" class="form-control" name="titulo" [(ngModel)]="producto.titulo" autocomplete="new-text" placeholder="Titulo del producto">
+                                                    </div>
+                                                    <div class="col-lg-3 form-group">
+                                                        <label><b>Categoría</b></label>
+                                                        <select required name="idcategoria" [(ngModel)]="producto.idcategoria" class="form-control" autocomplete="new-text">
+                                                        <option value=""><b>Selecionar</b></option>
+                                                      <option *ngFor="let item of categorias" value="{{item._id}}">{{item.titulo.toUpperCase()}}</option>
+                                                    </select>
+                                                    </div>
+
+                                                    <div class="col-lg-3 form-group">
+                                                        <label><b>Precio compra</b></label>
+                                                        <input required type="number" name="precio_compra" [(ngModel)]="producto.precio_compra" class="form-control" autocomplete="new-text">
+                                                    </div>
+                                                    <div class="col-lg-3 form-group">
+                                                        <label><b>Precio venta</b></label>
+                                                        <input required type="number" name="precio_venta" [(ngModel)]="producto.precio_venta" class="form-control" autocomplete="new-text">
+                                                    </div>
+                                                    <div class="col-lg-3 form-group">
+                                                        <label><b>puntos</b></label>
+                                                        <input required type="number" name="puntos" [(ngModel)]="producto.puntos" class="form-control" autocomplete="new-text">
+                                                    </div>
+                                                    <div class="col-lg-12 form-group">
+                                                        <label for="descricpion"><b>Descripcion</b></label>
+                                                        <textarea name="descripcion" [(ngModel)]="producto.descripcion" id="editor" class="form-control"></textarea>
+                                                    </div>
+                                                    <div class="col-lg-12 form-group">
+                                                        <button class="btn btn-primary btn-lg" type="submit">Actualizar</button>
+                                                    </div>
+
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="row">
+                                                <div class="col-lg-12 form-group">
+                                                    <div class="text-center">
+                                                        <label><b>Portada</b></label>
+                                                        <br>
+                                                        <img [src]="imgSelect || url+'producto/img/'+producto.imagen" class="rounded-circle img-responsive mt-2" width="128" height="128">
+                                                        <div class="mt-2">
+                                                            <input required class="btn btn-primary" (change)="imgSelected($event)" type="file" style="width:100% !important;">
+                                                        </div>
+                                                        <small>For best results, use an image at least 128px by 128px in .jpg
+                                                    format</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 form-group text-center">
+                                                    <label><b>Galería</b></label>
+                                                    <br>
+                                                    <button id="btn_add" class="btn btn-success">Nueva imagen</button>
+                                                    <hr>
+                                                    <div class="row">
+                                                        <table id="detalles" class="table table-sm">
+                                                            <thead>
+                                                                <th>Opcion</th>
+                                                                <th>Archivo</th>
+                                                            </thead>
+                                                            <tbody>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div>
